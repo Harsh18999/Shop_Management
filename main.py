@@ -7,11 +7,4 @@ st.title("Shop Management App")
 st.write('''
 This app dedicated to Harsh. It is a shop management web app ,it Help to shopkeeper to help him to analysis his sell 
          and store data. This app is under construction #Thank You''')
-st.markdown("""
-<style>
-        body{
-        background-color: #ff0000
-        }
-</style>
-            """
-        ,unsafe_allow_html=True)
+
