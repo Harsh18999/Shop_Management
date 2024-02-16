@@ -5,7 +5,7 @@ ins='''
        CREATE TABLE IF NOT EXISTS SIGNIN(
        NAME VARCHAR(70)'
        EMAIL VARCHAR(70) PRIMARY KEY,
-       PASSWORD VARCHAR(70}
+       PASSWORD VARCHAR(70)
        )
 '''
 data=conn.execute(ins)
