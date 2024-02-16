@@ -2,8 +2,7 @@ import streamlit as st
 import sqlite3
 conn=sqlite3.connect("Darabase.db")
 ins=''' 
-         INSERT INTO SIGNIN(NAME,EMAIL,PASSWORD) VALUES
-                ("HARSH","MYGMAIL.COM","PASSWORD") 
+         SELECT * FROM SIGNIN
          
     '''
 data=conn.execute(ins)
