@@ -10,3 +10,4 @@ data=conn.execute(ins)
 st.title('Harsh')
 for n in data:
     st.write(n)
+conn.close()
