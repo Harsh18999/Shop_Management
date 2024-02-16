@@ -3,7 +3,7 @@ import sqlite3
 conn=sqlite3.connect("Darabase.db")
 ins='''
        CREATE TABLE IF NOT EXISTS SIGNIN(
-       NAME VARCHAR(70)'
+       NAME VARCHAR(70),
        EMAIL VARCHAR(70) PRIMARY KEY,
        PASSWORD VARCHAR(70)
        )
