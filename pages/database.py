@@ -3,7 +3,7 @@ import sqlite3
 conn=sqlite3.connect("Darabase.db")
 INS= ''' 
          INSERT INTO SIGNIN(NAME,EMAIL,PASSWORD) VALUES
-                ("HARSH","MYGMAIL.COM","PASSWORD") 
+                ("HARSH","MYGMAIL.","PASSWORD") 
          
 '''
 data=conn.execute(INS)
