@@ -5,8 +5,8 @@ INS= '''
          INSERT INTO SIGNIN(NAME,EMAIL,PASSWORD) VALUES
                 ("HARSH","MYGMAIL.COM","PASSWORD") 
          
-    '''
+'''
 data=conn.execute(INS)
-st.title('Harsh')
 conn.commit()
 conn.close()
+st.title("Harsh")
