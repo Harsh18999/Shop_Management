@@ -16,6 +16,5 @@ for n in l:
         for m in list(k):
             p.append(m)
     df[n]=p
-    conn.commit()
 st.dataframe(df)
 conn.close()
