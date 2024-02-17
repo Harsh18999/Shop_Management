@@ -20,6 +20,7 @@ if st.button("Submit"):
     try:
         cursor.execute(query)
         obj.commit()
+        cursor.close()
         st.success("Succesfully Saved, Thank you")
     except:
         st.warning("SOME ERROR TRY AGAIN")
