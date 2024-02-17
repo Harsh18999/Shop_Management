@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import pymysql as mq
+import pymysql.connector as mq
 obj=mq.connect( 
                 host="sql6.freesqldatabase.com" ,
                 user="sql6684814",
