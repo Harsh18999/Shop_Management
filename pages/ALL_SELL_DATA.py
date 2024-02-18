@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import streamlit as st
-import pandas as pd
 import pymysql as mq
 obj=mq.connect( 
                 host="sql6.freesqldatabase.com" ,
