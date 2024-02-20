@@ -1,4 +1,4 @@
 streamlit==1.31.0
 pandas==2.1.4
-pymysql==1.4.6
+pymysql==1.1.0
 SQLALchemy==2.0.27
