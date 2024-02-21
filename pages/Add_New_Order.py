@@ -1,4 +1,3 @@
-from sqlalchemy import text
 conn = st.connection('mysql', type='sql')
 current_date_time = datetime.now()
 st.title("New custmor")
