@@ -1,4 +1,4 @@
 pandas==2.2.0
-SQLAlchemy==2.0.27
+sqlachemy==2.0.27
 streamlit==1.31.0
 datetime==5.4
