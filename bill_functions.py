@@ -105,7 +105,7 @@ def main():
                     unsafe_allow_html=True)
 
 def add_new_order():
-    conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+    conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
     cursor=conn.cursor()
     current_date_time = datetime.now()
     cursor=conn.cursor()
@@ -168,7 +168,7 @@ def selected_products():
     with col3:
         reset=st.button('Cancel Order')
         if reset:
-            conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+            conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
             cursor=conn.cursor()
             for n in range (len(dates)):
                 cursor.execute(f'''DELETE FROM {SIGNIN.variable.username}_ALL_DATA
