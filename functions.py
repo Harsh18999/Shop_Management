@@ -22,7 +22,7 @@ def add_product():
                 if price>0:
                     try:
 
-                        conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+                        conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
                         cursor=conn.cursor()
                         cursor.execute(" INSERT INTO {}_PRODUCT_LIST (PRODUCT_NAME,QUANTITY,PRODUCT_TYPE,PRICE) VALUES ('{}','{}', '{}','{}')".format(username,name,int(quantity),select_type,int(price)))
                         conn.commit()
@@ -40,7 +40,7 @@ def add_product():
 # take a new order by owner
              
 def add_new_order():
-    conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+    conn = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
     name='N'
     cursor=conn.cursor()
     current_date_time = datetime.now()
