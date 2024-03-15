@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import psycopg2 
-obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=sslmode=require&sslrootcert=root.crt")
+obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
 cursor=obj.cursor()
 df=pd.DataFrame()
 l=["CUSTOMER_NAME","ORDER_NAME","PRICE","ORDER_ID","DATE","TIME"]
