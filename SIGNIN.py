@@ -10,7 +10,7 @@ import variable
 alphabet_list = [chr(i) for i in range(ord('a'), ord('z')+1)]
 def password_and_username_validator(password,email,username):
     def password_validator(password,email):
-        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
         cursor=obj.cursor()
         cursor.execute(f''' SELECT PASSWORD FROM USERS WHERE EMAIL='{email}' ''')
         res=cursor.fetchall()
@@ -21,7 +21,7 @@ def password_and_username_validator(password,email,username):
             else:
                 False
     def username_validator(username,email):
-        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
         cursor=obj.cursor()
         cursor.execute(f''' SELECT USERNAME FROM USERS WHERE EMAIL='{email}' ''')
         res=cursor.fetchall()
@@ -43,7 +43,7 @@ def password_and_username_validator(password,email,username):
 
 
 def username_checker(username):
-    obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+    obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
     cursor=obj.cursor()
     cursor.execute(f''' SELECT USERNAME FROM USERS''')
     res=cursor.fetchall()
@@ -75,7 +75,7 @@ def data_sender(mail,username,name):
         server.sendmail("kumarh18999@gmail",{mail},msg=f"Subject: {subject}\n\n{message}")
         server.quit()
     def database(name,user_name,mail,password):
-        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
         cursor=obj.cursor()
         cursor.execute('''INSERT INTO USERS (USERNAME, PASSWORD, NAME, EMAIL) VALUES (%s, %s, %s, %s)''',
                        (user_name, password, name, mail))
@@ -160,7 +160,7 @@ def change_password(email):
     if submitted:
         if ps==cps:
             try:
-                obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
+                obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=require&sslrootcert=root.crt")
                 cursor=obj.cursor()
                 cursor.execute(f''' UPDATE USERS
                                     SET PASSWORD = '{cps}'
