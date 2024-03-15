@@ -16,4 +16,4 @@ for n in l:
         for m in list(k):
             p.append(m)
     df[n]=p
-st.dataframe(df)
+st.table(df)
