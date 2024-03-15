@@ -8,7 +8,7 @@ l=["CUSTOMER_NAME","ORDER_NAME","PRICE","ORDER_ID","DATE","TIME"]
 st.title('''HEY FRIEND I AM :blue[HARSH] 👋''')
 st.write("THIS IS TODAY SELL DATA")
 for n in l:
-    query = "SELECT {} FROM SELL_DATA".format(n)
+    query = "SELECT {} FROM Harsh20_ALL_DATA".format(n)
     data=cursor.execute(query)
     result=cursor.fetchall()
     p=[]
