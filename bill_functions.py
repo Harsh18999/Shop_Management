@@ -181,12 +181,7 @@ def selected_products():
         if button:
             st.cache_resource.clear()
             st.success('Reset Successfully')
-    bill=st.button('Generate Your Bill')
-    if bill:
-        for n in range(len(product_list())):
-           p={"description": f"{added_product[n]}", "quantity": quantity_product[n], "unit_price": price_product[n]/quantity_product[n] ,"amount": price_product[n],'discount':'5%'}
-           add_item(p)
-        variable.bill_status=True
+    
 if variable.bill_status==False:
     col1, col2= st.columns(2)
     with col1:
