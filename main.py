@@ -1,142 +1,114 @@
 import streamlit as st
-from datetime import datetime 
-import psycopg2
+import os
 import pandas as pd
-import SIGNIN
-import functions
-import bill_functions
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+import numpy as np 
+from mlxtend.plotting import plot_decision_regions
+from sklearn.preprocessing import LabelEncoder,PolynomialFeatures
+import sklearn.datasets as dt
+from kaggle.api.kaggle_api_extended import KaggleApi
 
-def login():
-    st.title("Log In Page")
-    form=st.form("Log In")
-    user_name = form.text_input("Enter Your User_Name")
-    email=form.text_input('Enter Your Email')
-    password = form.text_input("Enter Your Password")
-    submitted=form.form_submit_button("Submit")
-    if submitted:
-        if len(user_name)!=0:
-            if len(email)!=0:
-                 if len(password)!=0:
-                     if SIGNIN.password_and_username_validator(password,email,user_name):
-                        try:   
-                            st.success("THANK YOU ")
-                            st.session_state.login_status=True
-                            st.session_state.username=user_name
-                            st.session_state.email=email
-                            st.session_state.bill_status=False
-                        except:
-                            st.error('SOME ERROR ...PLEASE TRY AGAIN')
-                 else:
-                     st.warning('Please Enter Your Password')
-            else :
-                st.warning("Please Enter Your Email")
-        else:
-            st.warning("PLEASE ENTER YOUR NAME")
-    else:
-        st.write(':blue[PLEASE ENTER DETAILS]')
-
-
-def change_password(email):
-    form=st.form("Change Password")
-    form.header('Reset Password')
-    ps = form.text_input("Enter Your Password")
-    cps = form.text_input("Re-enter Your Password")
-    submitted=form.form_submit_button("Submit")
-    if submitted:
-        if ps==cps:
-            try:
-                obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
-                cursor=obj.cursor()
-                cursor.execute(f''' UPDATE USERS
-                                    SET PASSWORD = '{cps}'
-                                    WHERE EMAIL = '{email}'
-                                ''')
-                obj.commit()
-                obj.close()
-                st.success('PASSWORD CHANGE SUCCESSFULLY')
-            except:
-                st.error('THIS USER IS NOT EXIST')
-        else:
-            st.warning('Password is not same ! Please check')
-if 'login_status' not in st.session_state:
-    st.sidebar.title('Shoap Management App')
-    selected_option=st.sidebar.selectbox('DATA',['Menu','Login','Signin'])
-    if selected_option=='Menu':
-        st.title('''HEY FRIEND I AM :red[HARSH] 👋''')
-        st.write('''
-                  THIS APP DEDICATED TO THE HARSH . THIS APP PERPOSE IS GIVE SOME ANALYTICAL HELP TO SHOP KEEPS TO ANALYSIS HIS CUSTOMER DATA AND SELL DATA :blue[Thank You]''')
-        st.write('Please login to access our facilities')
-    elif selected_option=='Login':
-        login()
-    elif selected_option=='Signin':
-        SIGNIN.Signin()
-else:
-    st.sidebar.title('Shoap Management App')
-    selected_option_1=st.sidebar.selectbox('Change Password',['Not Selected','Change Password'])
-    if selected_option_1=='Not Selected':
-        st.write()
-    if selected_option_1=='Change Password':
-        SIGNIN.change_password(SIGNIN.variable.email)
-
-# data analysis and management 
-    options=['Not Selected','ADD NEW CUTOMER','TOTAL SELL','ADD PRODUCT']
-    selected_option_2=st.sidebar.selectbox('DATA',options)
-    if selected_option_2=='Not Selected':
-        st.write()
-    if selected_option_2=='ADD NEW CUTOMER':
-        if st.session_state.bill_status==False:
-            col1, col2= st.columns(2)
-            with col1:
-                bill_functions.add_new_order()
-            with col2:    
-                bill_functions.selected_products()
-                added_product=[]
-                quantity_product=[]
-                price_product=[]
-                dates=[]
-                times=[]
-                for n in bill_functions.product_list():
-                    added_product.append(n[0])
-                    quantity_product.append(n[1])
-                    price_product.append(n[2])
-                    dates.append(n[3])
-                    times.append(n[4])
-                bill=st.button('Generate Your Bill')
-                if bill:
-                    for n in range(len(bill_functions.product_list())):
-                        p={"description": f"{added_product[n]}", "quantity": quantity_product[n], "unit_price": price_product[n]/quantity_product[n] ,"amount": price_product[n],'discount':'5%'}
-                        bill_functions.add_item(p)
-                        st.session_state.bill_status=True
-                 
-                
-        else:
-            bill_functions.main()
-            back=st.button('Back')
-            if back:
-                st.session_state.bill_status=False
-        
-    if selected_option_2=='TOTAL SELL':
-        obj = psycopg2.connect("postgresql://MYPROJECT20.COM:ZNfo9DxeFp-WoNzpTDJPmg@almond-heron-1166.j77.cockroachlabs.cloud:26257/project?sslmode=verify-full")
-        cursor=obj.cursor()
-        df=pd.DataFrame()
-        l=["CUSTOMER_NAME","ORDER_NAME","PRICE","ORDER_ID","DATE","TIME"]
-        st.subheader('''Your Total Sell Data''')
-        for n in l:
-            query = f'SELECT {n} FROM {st.session_state.username}_ALL_DATA'
-            cursor.execute(query)
-            result=cursor.fetchall()
-            p=[]
-            for k in result:
-                for m in list(k):
-                    p.append(m)
-            df[n]=p
-        st.table(df)
-
-    if selected_option_2=='ADD PRODUCT':
-        functions.add_product()
+def Algorithm(X,y,clf):
+    Model = LogisticRegression() if clf == 'Binary' else LogisticRegression(multi_class='multinomial')
+    Model.fit(X,y)
     
-    if selected_option_1=='Not Selected' and selected_option_2=='Not Selected':
-        st.title('''HEY FRIEND I AM :red[HARSH] 👋''')
-        st.write('''
-               THIS APP DEDICATED TO THE HARSH . THIS APP PERPOSE IS GIVE SOME ANALYTICAL HELP TO SHOP KEEPS TO ANALYSIS HIS CUSTOMER DATA AND SELL DATA :blue[Thank You]''')
-        st.write('Please login to access our facilities')
+    y_pred = Model.predict(X)
+    fig = plt.figure(figsize=(10,6))
+    acc = accuracy_score(y,y_pred)
+    plt.title(f'Accuracy Score : {acc}')
+    plot_decision_regions(X, y, Model, legend=len(np.unique(y)))
+    st.pyplot(fig)
+
+def plot_decision_boundary(X,y,degree=1):
+
+    poly = PolynomialFeatures(degree=degree)
+    X_trf = poly.fit_transform(X)
+
+    Model = LogisticRegression()
+    Model.fit(X_trf,y)
+    y_pred = Model.predict(X_trf)
+    accuracy = accuracy_score(y_pred,y)
+
+    a=np.arange(start=X[:,0].min()-1, stop=X[:,0].max()+1, step=0.01)
+    b=np.arange(start=X[:,1].min()-1, stop=X[:,1].max()+1, step=0.01)
+
+
+    XX,YY=np.meshgrid(a,b)
+
+    input_array=np.array([XX.ravel(),YY.ravel()]).T
+
+    labels=Model.predict(poly.transform(input_array))
+
+    fig = plt.figure(figsize=(12,6))
+    plt.contourf(XX,YY,labels.reshape(XX.shape),alpha=0.5)
+    plt.scatter(X[:,0],X[:,1], c=y)
+    plt.title('Degree = {}, accuracy is {}'.format(degree,np.round(accuracy,4)))
+    st.pyplot(fig)
+
+
+st.sidebar.title('Logistic Regression Visualizer')
+st.subheader('Logistic Regression Visualization Tool!')
+dataset_type = st.sidebar.selectbox('Select dataset ',['Generated','Uploaded'])
+dataset = None
+data = None
+
+if dataset_type == 'Uploaded':
+    dataset = st.sidebar.file_uploader('Please Upload File')
+    if dataset:
+       data = pd.read_csv(dataset)
+       columns = data.columns 
+       x1 = st.sidebar.selectbox('Select X1',columns)
+       x2 = st.sidebar.selectbox('Select X2',[x for x in columns if x != x1])
+       target = st.sidebar.selectbox('Select Target Feature',[x for x in columns if x != x1 and x != x2 ])
+       clf_type = st.sidebar.selectbox('Classification Type', ['Binary','Multinomial','Polynomial'] )
+       if clf_type == 'Polynomial':
+            degree = int(st.sidebar.number_input(label='Enter Polynomial degree',min_value=1,max_value=15,step=1))
+       scatt = st.sidebar.button('Plot data')
+
+       if scatt:
+           if data.dtypes[target]!=int:
+               le = LabelEncoder()
+               le.fit(data[target])
+               data[target] = le.transform(data[target])
+           fig = plt.figure(figsize = (12,6)) 
+           plt.scatter(data[x1],data[x2],c=data[target],cmap='winter',s=100)
+           st.pyplot(fig)
+
+       run_algorithm = st.sidebar.button('Run Algorithm') 
+
+       if run_algorithm:
+            if data.dtypes[target]!=int:
+                le = LabelEncoder()
+                le.fit(data[target])
+                data[target] = le.transform(data[target])
+            X = data[[x1,x2]].values
+            y = data[target].values
+            if clf_type == 'Polynomial':
+                plot_decision_boundary(X,y,degree)
+                
+            else:
+                Algorithm(X,y,clf_type)
+                
+       st.sidebar.write(data.head())
+
+elif dataset_type == 'Generated':
+    X,y = None,None
+
+    n_samples = st.sidebar.number_input(label='Enter Number of sumples',min_value=10,value=100)
+    n_classes = st.sidebar.number_input(label='Enter Number of classes in target variable',min_value=2)
+    classs_diff = st.sidebar.number_input(label='Enter distance between each classes',value=0.3,min_value=0.1)
+    clf_type = st.sidebar.selectbox('Classification Type', ['Binary','Multinomial','Polynomial'] )
+    if clf_type == 'Polynomial':
+           degree = int(st.sidebar.number_input(label='Enter Polynomial degree',min_value=1,max_value=15,step=1))
+
+    if st.sidebar.button('Generate dataset'):
+        X,y = dt.make_classification(n_samples=n_samples, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=n_classes, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=classs_diff, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=41)
+        if clf_type == 'Polynomial':
+            plot_decision_boundary(X,y,degree)
+
+        else:
+            Algorithm(X,y,clf_type)
+           
+
