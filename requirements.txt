@@ -1,6 +1,8 @@
 pandas==2.2.0
-SQLAlchemy== 2.0.28
-streamlit==1.31.0
-datetime==5.4
-psycopg2-binary==2.9.9
-reportlab==4.1.0
+streamlit
+pandas 
+scikit-learn
+matplotlib.pyplot as pl
+import numpy 
+mlxtend.plotting import plot_decision_regions
+
