@@ -3,6 +3,6 @@ streamlit
 pandas 
 scikit-learn
 matplotlib.pyplot as pl
-import numpy 
+numpy 
 mlxtend
 
