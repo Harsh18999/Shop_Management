@@ -8,7 +8,6 @@ import numpy as np
 from mlxtend.plotting import plot_decision_regions
 from sklearn.preprocessing import LabelEncoder,PolynomialFeatures
 import sklearn.datasets as dt
-from kaggle.api.kaggle_api_extended import KaggleApi
 
 def Algorithm(X,y,clf):
     Model = LogisticRegression() if clf == 'Binary' else LogisticRegression(multi_class='multinomial')
